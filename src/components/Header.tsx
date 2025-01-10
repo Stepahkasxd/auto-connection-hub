@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { Menu, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -15,6 +20,12 @@ const Header = () => {
     'Zeekr': ['001', '007', '009'],
     'Lixiang': ['L6', 'L7', 'L9', 'Mega'],
   };
+
+  const menuItems = [
+    'Подбор автомобиля',
+    'Заказ из другой страны',
+    'Техподдержка'
+  ];
 
   return (
     <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
@@ -42,20 +53,39 @@ const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ))}
-            <Button variant="ghost" className="menu-item">
-              Подбор автомобиля
-            </Button>
-            <Button variant="ghost" className="menu-item">
-              Заказ из другой страны
-            </Button>
-            <Button variant="ghost" className="menu-item">
-              Техподдержка
-            </Button>
+            {menuItems.map((item) => (
+              <Button key={item} variant="ghost" className="menu-item">
+                {item}
+              </Button>
+            ))}
           </nav>
 
-          <Button variant="ghost" className="md:hidden">
-            <Menu className="h-6 w-6" />
-          </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" className="md:hidden">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <div className="flex flex-col space-y-4 mt-4">
+                {Object.entries(carModels).map(([brand, models]) => (
+                  <div key={brand} className="space-y-2">
+                    <h3 className="font-semibold">{brand}</h3>
+                    {models.map((model) => (
+                      <Button key={model} variant="ghost" className="w-full justify-start">
+                        {brand} {model}
+                      </Button>
+                    ))}
+                  </div>
+                ))}
+                {menuItems.map((item) => (
+                  <Button key={item} variant="ghost" className="w-full justify-start">
+                    {item}
+                  </Button>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
