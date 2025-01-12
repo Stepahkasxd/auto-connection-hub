@@ -53,8 +53,12 @@ const ContactForm = () => {
           onValueChange={(value) => setFormData({ ...formData, contactMethod: value })}
         >
           <div className="flex items-center space-x-2">
+            <RadioGroupItem value="telegram" id="telegram" />
+            <Label htmlFor="telegram">Telegram</Label>
+          </div>
+          <div className="flex items-center space-x-2">
             <RadioGroupItem value="whatsapp" id="whatsapp" />
-            <Label htmlFor="whatsapp">WhatsApp сообщение</Label>
+            <Label htmlFor="whatsapp">WhatsApp</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="call" id="call" />

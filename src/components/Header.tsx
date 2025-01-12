@@ -11,15 +11,40 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
+import ContactForm from './ContactForm';
 
 const Header = () => {
   const [city, setCity] = useState('Москва');
+  const [isCarSelectionOpen, setIsCarSelectionOpen] = useState(false);
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
+  const [carPreferences, setCarPreferences] = useState({
+    budget: '',
+    color: '',
+    power: ''
+  });
   const { toast } = useToast();
 
   const carModels = {
@@ -27,24 +52,20 @@ const Header = () => {
     'Lixiang': ['L6', 'L7', 'L9', 'Mega'],
   };
 
-  const handleSupport = () => {
+  const handleCarSelectionSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Car preferences:', carPreferences);
     toast({
-      title: "Техподдержка",
-      description: "Наши специалисты свяжутся с вами в ближайшее время",
+      title: "Заявка отправлена",
+      description: "Мы подберем автомобиль согласно вашим предпочтениям",
     });
+    setIsCarSelectionOpen(false);
   };
 
   const handleInternationalOrder = () => {
     toast({
       title: "Заказ из другой страны",
       description: "Открыта форма международного заказа",
-    });
-  };
-
-  const handleCarSelection = () => {
-    toast({
-      title: "Подбор автомобиля",
-      description: "Начат процесс подбора автомобиля",
     });
   };
 
@@ -79,7 +100,7 @@ const Header = () => {
             <Button 
               variant="ghost" 
               className="menu-item flex items-center gap-2" 
-              onClick={handleCarSelection}
+              onClick={() => setIsCarSelectionOpen(true)}
             >
               <Car className="h-4 w-4" />
               Подбор автомобиля
@@ -95,7 +116,7 @@ const Header = () => {
             <Button 
               variant="ghost" 
               className="menu-item flex items-center gap-2"
-              onClick={handleSupport}
+              onClick={() => setIsSupportOpen(true)}
             >
               <HeadphonesIcon className="h-4 w-4" />
               Техподдержка
@@ -124,7 +145,7 @@ const Header = () => {
                 <Button 
                   variant="ghost" 
                   className="w-full justify-start flex items-center gap-2"
-                  onClick={handleCarSelection}
+                  onClick={() => setIsCarSelectionOpen(true)}
                 >
                   <Car className="h-4 w-4" />
                   Подбор автомобиля
@@ -140,7 +161,7 @@ const Header = () => {
                 <Button 
                   variant="ghost" 
                   className="w-full justify-start flex items-center gap-2"
-                  onClick={handleSupport}
+                  onClick={() => setIsSupportOpen(true)}
                 >
                   <HeadphonesIcon className="h-4 w-4" />
                   Техподдержка
@@ -151,6 +172,72 @@ const Header = () => {
           </Sheet>
         </div>
       </div>
+
+      {/* Car Selection Dialog */}
+      <Dialog open={isCarSelectionOpen} onOpenChange={setIsCarSelectionOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Подбор автомобиля</DialogTitle>
+            <DialogDescription>
+              Укажите ваши предпочтения, и мы подберем подходящий автомобиль
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleCarSelectionSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="budget">Бюджет (₽)</Label>
+              <Input
+                id="budget"
+                type="number"
+                placeholder="Укажите ваш бюджет"
+                value={carPreferences.budget}
+                onChange={(e) => setCarPreferences({ ...carPreferences, budget: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="color">Предпочитаемый цвет</Label>
+              <Select onValueChange={(value) => setCarPreferences({ ...carPreferences, color: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Выберите цвет" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="white">Белый</SelectItem>
+                  <SelectItem value="black">Черный</SelectItem>
+                  <SelectItem value="silver">Серебристый</SelectItem>
+                  <SelectItem value="blue">Синий</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="power">Мощность (л.с.)</Label>
+              <Input
+                id="power"
+                type="number"
+                placeholder="Укажите желаемую мощность"
+                value={carPreferences.power}
+                onChange={(e) => setCarPreferences({ ...carPreferences, power: e.target.value })}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              Отправить
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Support Dialog */}
+      <Dialog open={isSupportOpen} onOpenChange={setIsSupportOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Техническая поддержка</DialogTitle>
+            <DialogDescription>
+              Оставьте ваши контактные данные, и мы свяжемся с вами
+            </DialogDescription>
+          </DialogHeader>
+          <ContactForm />
+        </DialogContent>
+      </Dialog>
     </header>
   );
 };
