@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Menu, ChevronDown, Car, Globe, HeadphonesIcon } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 import {
   Sheet,
   SheetContent,
@@ -18,13 +21,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -32,11 +28,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
 import ContactForm from './ContactForm';
 
 const Header = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+  
   const [city, setCity] = useState('Москва');
   const [isCarSelectionOpen, setIsCarSelectionOpen] = useState(false);
   const [isSupportOpen, setIsSupportOpen] = useState(false);
@@ -103,7 +101,7 @@ const Header = () => {
               onClick={() => setIsCarSelectionOpen(true)}
             >
               <Car className="h-4 w-4" />
-              Подбор автомобиля
+              {t.carSelection}
             </Button>
             <Button 
               variant="ghost" 
@@ -111,7 +109,7 @@ const Header = () => {
               onClick={handleInternationalOrder}
             >
               <Globe className="h-4 w-4" />
-              Заказ из другой страны
+              {t.internationalOrder}
             </Button>
             <Button 
               variant="ghost" 
@@ -119,9 +117,10 @@ const Header = () => {
               onClick={() => setIsSupportOpen(true)}
             >
               <HeadphonesIcon className="h-4 w-4" />
-              Техподдержка
+              {t.support}
             </Button>
             <ThemeToggle />
+            <LanguageToggle />
           </nav>
 
           <Sheet>
@@ -148,7 +147,7 @@ const Header = () => {
                   onClick={() => setIsCarSelectionOpen(true)}
                 >
                   <Car className="h-4 w-4" />
-                  Подбор автомобиля
+                  {t.carSelection}
                 </Button>
                 <Button 
                   variant="ghost" 
@@ -156,7 +155,7 @@ const Header = () => {
                   onClick={handleInternationalOrder}
                 >
                   <Globe className="h-4 w-4" />
-                  Заказ из другой страны
+                  {t.internationalOrder}
                 </Button>
                 <Button 
                   variant="ghost" 
@@ -164,7 +163,7 @@ const Header = () => {
                   onClick={() => setIsSupportOpen(true)}
                 >
                   <HeadphonesIcon className="h-4 w-4" />
-                  Техподдержка
+                  {t.support}
                 </Button>
                 <ThemeToggle />
               </div>
@@ -177,7 +176,7 @@ const Header = () => {
       <Dialog open={isCarSelectionOpen} onOpenChange={setIsCarSelectionOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Подбор автомобиля</DialogTitle>
+            <DialogTitle>{t.carSelection}</DialogTitle>
             <DialogDescription>
               Укажите ваши предпочтения, и мы подберем подходящий автомобиль
             </DialogDescription>
@@ -195,21 +194,21 @@ const Header = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="color">Предпочитаемый цвет</Label>
+              <Label htmlFor="color">{t.color}</Label>
               <Select onValueChange={(value) => setCarPreferences({ ...carPreferences, color: value })}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Выберите цвет" />
+                  <SelectValue placeholder={t.selectColor} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="white">Белый</SelectItem>
-                  <SelectItem value="black">Черный</SelectItem>
-                  <SelectItem value="silver">Серебристый</SelectItem>
-                  <SelectItem value="blue">Синий</SelectItem>
+                  <SelectItem value="white">{t.white}</SelectItem>
+                  <SelectItem value="black">{t.black}</SelectItem>
+                  <SelectItem value="silver">{t.silver}</SelectItem>
+                  <SelectItem value="blue">{t.blue}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="power">Мощность (л.с.)</Label>
+              <Label htmlFor="power">{t.power} (л.с.)</Label>
               <Input
                 id="power"
                 type="number"

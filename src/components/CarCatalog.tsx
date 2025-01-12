@@ -1,4 +1,6 @@
 import { useState, useMemo } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 import { 
   Card, 
   CardContent, 
@@ -143,12 +145,19 @@ const cars: Car[] = [
 ];
 
 const CarCatalog = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+  
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [selectedTrim, setSelectedTrim] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceFilter, setPriceFilter] = useState<string>("all");
+  const [filters, setFilters] = useState({
+    price: "all",
+    color: "all",
+    power: "all"
+  });
 
   const handleCardClick = (car: Car) => {
     if (!car) return;
@@ -174,12 +183,14 @@ const CarCatalog = () => {
       const matchesSearch = car.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           car.description.toLowerCase().includes(searchQuery.toLowerCase());
       
-      if (priceFilter === "all") return matchesSearch;
+      const matchesPrice = filters.price === "all" || car.price.includes(filters.price);
+      const matchesColor = filters.color === "all" || car.colors.some(c => c.name === filters.color);
+      const matchesPower = filters.power === "all" || 
+                          (car.specs?.power && parseInt(car.specs.power) >= parseInt(filters.power));
       
-      const matchesPrice = car.price.includes(priceFilter);
-      return matchesSearch && matchesPrice;
+      return matchesSearch && matchesPrice && matchesColor && matchesPower;
     });
-  }, [searchQuery, priceFilter]);
+  }, [searchQuery, filters, cars]);
 
   const getSelectedTrimPrice = () => {
     if (!selectedCar || !selectedTrim) return "";
@@ -190,22 +201,57 @@ const CarCatalog = () => {
   return (
     <>
       <div className="mb-6 space-y-4">
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Input
-            placeholder="Поиск по названию или описанию..."
+            placeholder={t.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1"
+            className="w-full"
           />
-          <Select value={priceFilter} onValueChange={setPriceFilter}>
-            <SelectTrigger className="w-full sm:w-[200px]">
-              <SelectValue placeholder="Фильтр по цене" />
+          
+          <Select 
+            value={filters.price} 
+            onValueChange={(value) => setFilters(prev => ({ ...prev, price: value }))}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={t.price} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Все цены</SelectItem>
-              <SelectItem value="4 500">от 4.5 млн ₽</SelectItem>
-              <SelectItem value="5 000">от 5 млн ₽</SelectItem>
-              <SelectItem value="5 500">от 5.5 млн ₽</SelectItem>
+              <SelectItem value="all">{t.allPrices}</SelectItem>
+              <SelectItem value="4 500">{t.from} 4.5M ₽</SelectItem>
+              <SelectItem value="5 000">{t.from} 5M ₽</SelectItem>
+              <SelectItem value="5 500">{t.from} 5.5M ₽</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select 
+            value={filters.color} 
+            onValueChange={(value) => setFilters(prev => ({ ...prev, color: value }))}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={t.color} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t.allPrices}</SelectItem>
+              <SelectItem value="black">{t.black}</SelectItem>
+              <SelectItem value="white">{t.white}</SelectItem>
+              <SelectItem value="silver">{t.silver}</SelectItem>
+              <SelectItem value="blue">{t.blue}</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select 
+            value={filters.power} 
+            onValueChange={(value) => setFilters(prev => ({ ...prev, power: value }))}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={t.power} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t.allPrices}</SelectItem>
+              <SelectItem value="300">300+ л.с.</SelectItem>
+              <SelectItem value="400">400+ л.с.</SelectItem>
+              <SelectItem value="500">500+ л.с.</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -263,10 +309,10 @@ const CarCatalog = () => {
               <div className="grid grid-cols-2 gap-4">
                 {selectedCar.trims?.length > 0 && (
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Комплектация</h4>
+                    <h4 className="font-semibold">{t.trim}</h4>
                     <Select value={selectedTrim} onValueChange={setSelectedTrim}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Выберите комплектацию" />
+                        <SelectValue placeholder={t.selectTrim} />
                       </SelectTrigger>
                       <SelectContent>
                         {selectedCar.trims.map((trim) => (
@@ -281,10 +327,10 @@ const CarCatalog = () => {
                 
                 {selectedCar.colors?.length > 0 && (
                   <div className="space-y-2">
-                    <h4 className="font-semibold">Цвет</h4>
+                    <h4 className="font-semibold">{t.color}</h4>
                     <Select value={selectedColor} onValueChange={setSelectedColor}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Выберите цвет" />
+                        <SelectValue placeholder={t.selectColor} />
                       </SelectTrigger>
                       <SelectContent>
                         {selectedCar.colors.map((color) => (
@@ -306,7 +352,7 @@ const CarCatalog = () => {
 
               {selectedTrim && selectedCar.trims?.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Особенности комплектации</h4>
+                  <h4 className="font-semibold">{t.features}</h4>
                   <ul className="grid grid-cols-2 gap-2">
                     {selectedCar.trims
                       .find(t => t.name === selectedTrim)
@@ -322,22 +368,22 @@ const CarCatalog = () => {
 
               {selectedCar.specs && (
                 <div className="space-y-4">
-                  <h4 className="font-semibold">Характеристики</h4>
+                  <h4 className="font-semibold">{t.specifications}</h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 rounded-lg bg-secondary/50">
-                      <p className="font-medium">Мощность</p>
+                      <p className="font-medium">{t.power}</p>
                       <p className="text-muted-foreground">{selectedCar.specs.power}</p>
                     </div>
                     <div className="p-4 rounded-lg bg-secondary/50">
-                      <p className="font-medium">Разгон</p>
+                      <p className="font-medium">{t.acceleration}</p>
                       <p className="text-muted-foreground">{selectedCar.specs.acceleration}</p>
                     </div>
                     <div className="p-4 rounded-lg bg-secondary/50">
-                      <p className="font-medium">Запас хода</p>
+                      <p className="font-medium">{t.range}</p>
                       <p className="text-muted-foreground">{selectedCar.specs.range}</p>
                     </div>
                     <div className="p-4 rounded-lg bg-secondary/50">
-                      <p className="font-medium">Батарея</p>
+                      <p className="font-medium">{t.battery}</p>
                       <p className="text-muted-foreground">{selectedCar.specs.battery}</p>
                     </div>
                   </div>
