@@ -54,7 +54,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -84,7 +84,7 @@
 }
 
 .menu-item {
-  @apply relative px-4 py-2 transition-colors hover:bg-secondary rounded-md;
+  @apply relative px-4 py-2 transition-all duration-300 hover:bg-secondary rounded-md;
 }
 
 .menu-item::after {
@@ -97,7 +97,7 @@
 }
 
 .glass-card {
-  @apply bg-background/80 backdrop-blur-lg border border-border/50 shadow-lg;
+  @apply bg-background/80 backdrop-blur-lg border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300;
 }
 
 .neo-blur {

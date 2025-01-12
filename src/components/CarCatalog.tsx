@@ -55,7 +55,7 @@ const cars: Car[] = [
     name: "Zeekr 001",
     price: "от 4 500 000 ₽",
     description: "Роскошный электрический фастбэк с передовыми технологиями и впечатляющим запасом хода.",
-    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop",
     colors: [
       { name: "Космический серый", hex: "#2C3E50" },
       { name: "Полярный белый", hex: "#FFFFFF" },
@@ -81,58 +81,64 @@ const cars: Car[] = [
     }
   },
   {
-    id: "zeekr-007",
-    name: "Zeekr 007",
-    price: "от 4 800 000 ₽",
-    description: "Инновационный электрический седан с футуристическим дизайном и высокой производительностью.",
-    image: "https://images.unsplash.com/photo-1619767886558-efdc259b6e09?w=800&auto=format&fit=crop",
+    id: "lixiang-l9",
+    name: "Li L9",
+    price: "от 5 800 000 ₽",
+    description: "Флагманский гибридный внедорожник с роскошным салоном и инновационными технологиями.",
+    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop",
     colors: [
-      { name: "Матовый черный", hex: "#000000" },
+      { name: "Черный", hex: "#000000" },
       { name: "Серебристый", hex: "#C0C0C0" },
-      { name: "Красный металлик", hex: "#C0392B" }
+      { name: "Белый", hex: "#FFFFFF" }
     ],
     trims: [
       {
-        name: "Стандарт",
-        price: "4 800 000 ₽",
-        features: ["19-дюймовые колёса", "LED фары", "Беспроводная зарядка"]
+        name: "Pro",
+        price: "5 800 000 ₽",
+        features: ["21-дюймовые колёса", "Панорамная крыша", "Система автопилота"]
       },
       {
-        name: "Премиум",
-        price: "5 500 000 ₽",
-        features: ["21-дюймовые колёса", "Система автопилота", "Премиум отделка"]
+        name: "Max",
+        price: "6 500 000 ₽",
+        features: ["22-дюймовые колёса", "Премиум аудио", "Массаж всех сидений"]
       }
     ],
     specs: {
-      power: "536 л.с.",
-      acceleration: "3.9 сек до 100 км/ч",
-      range: "580 км",
-      battery: "95 кВт⋅ч"
+      power: "449 л.с.",
+      acceleration: "5.3 сек до 100 км/ч",
+      range: "1100 км",
+      battery: "44.5 кВт⋅ч"
     }
   },
   {
-    id: "zeekr-009",
-    name: "Zeekr 009",
-    price: "от 5 200 000 ₽",
-    description: "Премиальный электрический минивэн с просторным салоном и передовыми системами безопасности.",
-    image: "https://images.unsplash.com/photo-1621361365424-06f0c1376df7?w=800&auto=format&fit=crop",
+    id: "lixiang-l7",
+    name: "Li L7",
+    price: "от 4 900 000 ₽",
+    description: "Среднеразмерный гибридный кроссовер с отличной динамикой и комфортом.",
+    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop",
     colors: [
-      { name: "Темно-синий", hex: "#34495E" },
-      { name: "Бежевый", hex: "#E8D5C4" },
-      { name: "Зеленый металлик", hex: "#27AE60" }
+      { name: "Синий", hex: "#0066CC" },
+      { name: "Серый", hex: "#808080" },
+      { name: "Белый", hex: "#FFFFFF" }
     ],
     trims: [
       {
-        name: "Комфорт",
-        price: "5 200 000 ₽",
-        features: ["6 мест", "Панорамная крыша", "Электропривод дверей"]
+        name: "Pro",
+        price: "4 900 000 ₽",
+        features: ["19-дюймовые колёса", "Панорамная крыша", "Адаптивный круиз-контроль"]
       },
       {
-        name: "Максимум",
-        price: "6 100 000 ₽",
-        features: ["7 мест", "Развлекательная система", "Массаж всех сидений"]
+        name: "Max",
+        price: "5 600 000 ₽",
+        features: ["20-дюймовые колёса", "Премиум аудио", "Массаж передних сидений"]
       }
-    ]
+    ],
+    specs: {
+      power: "431 л.с.",
+      acceleration: "5.3 сек до 100 км/ч",
+      range: "1100 км",
+      battery: "42.8 кВт⋅ч"
+    }
   }
 ];
 

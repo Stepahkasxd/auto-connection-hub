@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { Menu, ChevronDown } from 'lucide-react';
+import { Menu, ChevronDown, Car, Globe, HeadphonesIcon } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -13,20 +16,37 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
 
 const Header = () => {
   const [city, setCity] = useState('Москва');
+  const { toast } = useToast();
 
   const carModels = {
     'Zeekr': ['001', '007', '009'],
     'Lixiang': ['L6', 'L7', 'L9', 'Mega'],
   };
 
-  const menuItems = [
-    'Подбор автомобиля',
-    'Заказ из другой страны',
-    'Техподдержка'
-  ];
+  const handleSupport = () => {
+    toast({
+      title: "Техподдержка",
+      description: "Наши специалисты свяжутся с вами в ближайшее время",
+    });
+  };
+
+  const handleInternationalOrder = () => {
+    toast({
+      title: "Заказ из другой страны",
+      description: "Открыта форма международного заказа",
+    });
+  };
+
+  const handleCarSelection = () => {
+    toast({
+      title: "Подбор автомобиля",
+      description: "Начат процесс подбора автомобиля",
+    });
+  };
 
   return (
     <header className="border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
@@ -56,11 +76,30 @@ const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ))}
-            {menuItems.map((item) => (
-              <Button key={item} variant="ghost" className="menu-item">
-                {item}
-              </Button>
-            ))}
+            <Button 
+              variant="ghost" 
+              className="menu-item flex items-center gap-2" 
+              onClick={handleCarSelection}
+            >
+              <Car className="h-4 w-4" />
+              Подбор автомобиля
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="menu-item flex items-center gap-2"
+              onClick={handleInternationalOrder}
+            >
+              <Globe className="h-4 w-4" />
+              Заказ из другой страны
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="menu-item flex items-center gap-2"
+              onClick={handleSupport}
+            >
+              <HeadphonesIcon className="h-4 w-4" />
+              Техподдержка
+            </Button>
             <ThemeToggle />
           </nav>
 
@@ -82,11 +121,30 @@ const Header = () => {
                     ))}
                   </div>
                 ))}
-                {menuItems.map((item) => (
-                  <Button key={item} variant="ghost" className="w-full justify-start">
-                    {item}
-                  </Button>
-                ))}
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start flex items-center gap-2"
+                  onClick={handleCarSelection}
+                >
+                  <Car className="h-4 w-4" />
+                  Подбор автомобиля
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start flex items-center gap-2"
+                  onClick={handleInternationalOrder}
+                >
+                  <Globe className="h-4 w-4" />
+                  Заказ из другой страны
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start flex items-center gap-2"
+                  onClick={handleSupport}
+                >
+                  <HeadphonesIcon className="h-4 w-4" />
+                  Техподдержка
+                </Button>
                 <ThemeToggle />
               </div>
             </SheetContent>
