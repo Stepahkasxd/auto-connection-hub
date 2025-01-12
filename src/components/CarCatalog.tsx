@@ -93,7 +93,19 @@ const cars: Car[] = [
 ];
 
 const CarCatalog = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+
+  const handleCardClick = (car: Car) => {
+    setSelectedCar(car);
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    // Clear selected car after dialog animation completes
+    setTimeout(() => setSelectedCar(null), 300);
+  };
 
   return (
     <>
@@ -102,7 +114,7 @@ const CarCatalog = () => {
           <Card 
             key={car.id} 
             className="hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-            onClick={() => setSelectedCar(car)}
+            onClick={() => handleCardClick(car)}
           >
             <CardHeader>
               <img
@@ -122,7 +134,7 @@ const CarCatalog = () => {
         ))}
       </div>
 
-      <Dialog open={!!selectedCar} onOpenChange={() => setSelectedCar(null)}>
+      <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
         <DialogContent className="max-w-3xl">
           {selectedCar && (
             <>
