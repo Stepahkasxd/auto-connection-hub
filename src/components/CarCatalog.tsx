@@ -209,16 +209,20 @@ const CarCatalog = () => {
         {filteredCars.map((car) => (
           <Card 
             key={car.id} 
-            className="hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+            className="glass-card hover:shadow-xl transition-all duration-300 cursor-pointer group"
             onClick={() => handleCardClick(car)}
           >
             <CardHeader>
-              <img
-                src={car.image}
-                alt={car.name}
-                className="w-full h-48 object-cover rounded-t-lg"
-              />
-              <CardTitle className="mt-4">{car.name}</CardTitle>
+              <div className="overflow-hidden rounded-lg">
+                <img
+                  src={car.image}
+                  alt={car.name}
+                  className="w-full h-48 object-cover rounded-lg transform transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <CardTitle className="mt-4 text-xl font-bold bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">
+                {car.name}
+              </CardTitle>
               <CardDescription className="text-lg font-semibold text-primary">
                 {car.price}
               </CardDescription>
@@ -232,19 +236,23 @@ const CarCatalog = () => {
 
       {selectedCar && (
         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
-          <DialogContent className="max-w-3xl">
+          <DialogContent className="max-w-3xl glass-card">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold">{selectedCar.name}</DialogTitle>
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">
+                {selectedCar.name}
+              </DialogTitle>
               <DialogDescription className="text-xl font-semibold text-primary">
                 {getSelectedTrimPrice()}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-6">
-              <img
-                src={selectedCar.image}
-                alt={selectedCar.name}
-                className="w-full h-64 object-cover rounded-lg"
-              />
+              <div className="overflow-hidden rounded-lg">
+                <img
+                  src={selectedCar.image}
+                  alt={selectedCar.name}
+                  className="w-full h-64 object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
+                />
+              </div>
               
               <div className="grid grid-cols-2 gap-4">
                 {selectedCar.trims?.length > 0 && (
@@ -293,12 +301,13 @@ const CarCatalog = () => {
               {selectedTrim && selectedCar.trims?.length > 0 && (
                 <div className="space-y-2">
                   <h4 className="font-semibold">Особенности комплектации</h4>
-                  <ul className="list-disc list-inside space-y-1">
+                  <ul className="grid grid-cols-2 gap-2">
                     {selectedCar.trims
                       .find(t => t.name === selectedTrim)
                       ?.features.map((feature, index) => (
-                        <li key={index} className="text-muted-foreground">
-                          {feature}
+                        <li key={index} className="flex items-center space-x-2 text-muted-foreground">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                          <span>{feature}</span>
                         </li>
                       ))}
                   </ul>
@@ -309,19 +318,19 @@ const CarCatalog = () => {
                 <div className="space-y-4">
                   <h4 className="font-semibold">Характеристики</h4>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
+                    <div className="p-4 rounded-lg bg-secondary/50">
                       <p className="font-medium">Мощность</p>
                       <p className="text-muted-foreground">{selectedCar.specs.power}</p>
                     </div>
-                    <div className="space-y-2">
+                    <div className="p-4 rounded-lg bg-secondary/50">
                       <p className="font-medium">Разгон</p>
                       <p className="text-muted-foreground">{selectedCar.specs.acceleration}</p>
                     </div>
-                    <div className="space-y-2">
+                    <div className="p-4 rounded-lg bg-secondary/50">
                       <p className="font-medium">Запас хода</p>
                       <p className="text-muted-foreground">{selectedCar.specs.range}</p>
                     </div>
-                    <div className="space-y-2">
+                    <div className="p-4 rounded-lg bg-secondary/50">
                       <p className="font-medium">Батарея</p>
                       <p className="text-muted-foreground">{selectedCar.specs.battery}</p>
                     </div>

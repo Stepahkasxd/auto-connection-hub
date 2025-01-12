@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Menu, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Sheet,
   SheetContent,
@@ -28,14 +29,16 @@ const Header = () => {
   ];
 
   return (
-    <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
+    <header className="border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="text-sm text-muted-foreground">
               г.{city}
             </div>
-            <h1 className="text-xl font-semibold">Autosputnik</h1>
+            <h1 className="text-xl font-semibold bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">
+              Autosputnik
+            </h1>
           </div>
           
           <nav className="hidden md:flex items-center space-x-6">
@@ -58,6 +61,7 @@ const Header = () => {
                 {item}
               </Button>
             ))}
+            <ThemeToggle />
           </nav>
 
           <Sheet>
@@ -83,6 +87,7 @@ const Header = () => {
                     {item}
                   </Button>
                 ))}
+                <ThemeToggle />
               </div>
             </SheetContent>
           </Sheet>
