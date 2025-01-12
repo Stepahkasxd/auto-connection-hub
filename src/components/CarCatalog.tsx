@@ -142,18 +142,19 @@ const CarCatalog = () => {
   const [selectedTrim, setSelectedTrim] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceFilter, setPriceFilter] = useState<string>("all"); // Changed default value
+  const [priceFilter, setPriceFilter] = useState<string>("all");
 
   const handleCardClick = (car: Car) => {
+    if (!car) return;
+    
     setSelectedCar(car);
-    setSelectedTrim(car.trims[0].name);
-    setSelectedColor(car.colors[0].name);
+    setSelectedTrim(car.trims[0]?.name || "");
+    setSelectedColor(car.colors[0]?.name || "");
     setIsDialogOpen(true);
   };
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    // Delay clearing the selected car to prevent null reference issues
     setTimeout(() => {
       setSelectedCar(null);
       setSelectedTrim("");
@@ -228,7 +229,7 @@ const CarCatalog = () => {
         ))}
       </div>
 
-      {selectedCar && (
+      {selectedCar && isDialogOpen && (
         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
           <DialogContent className="max-w-3xl">
             <DialogHeader>
