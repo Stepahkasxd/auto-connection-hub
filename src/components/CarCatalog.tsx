@@ -147,19 +147,20 @@ const CarCatalog = () => {
   const handleCardClick = (car: Car) => {
     if (!car) return;
     
+    const defaultTrim = car.trims?.[0]?.name ?? "";
+    const defaultColor = car.colors?.[0]?.name ?? "";
+    
     setSelectedCar(car);
-    setSelectedTrim(car.trims[0]?.name || "");
-    setSelectedColor(car.colors[0]?.name || "");
+    setSelectedTrim(defaultTrim);
+    setSelectedColor(defaultColor);
     setIsDialogOpen(true);
   };
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    setTimeout(() => {
-      setSelectedCar(null);
-      setSelectedTrim("");
-      setSelectedColor("");
-    }, 300);
+    setSelectedCar(null);
+    setSelectedTrim("");
+    setSelectedColor("");
   };
 
   const filteredCars = useMemo(() => {
@@ -177,7 +178,7 @@ const CarCatalog = () => {
   const getSelectedTrimPrice = () => {
     if (!selectedCar || !selectedTrim) return "";
     const trim = selectedCar.trims.find(t => t.name === selectedTrim);
-    return trim ? trim.price : "";
+    return trim?.price ?? "";
   };
 
   return (
@@ -229,7 +230,7 @@ const CarCatalog = () => {
         ))}
       </div>
 
-      {selectedCar && isDialogOpen && (
+      {selectedCar && (
         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
           <DialogContent className="max-w-3xl">
             <DialogHeader>
@@ -246,46 +247,50 @@ const CarCatalog = () => {
               />
               
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <h4 className="font-semibold">Комплектация</h4>
-                  <Select value={selectedTrim} onValueChange={setSelectedTrim}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите комплектацию" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {selectedCar.trims.map((trim) => (
-                        <SelectItem key={trim.name} value={trim.name}>
-                          {trim.name} - {trim.price}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {selectedCar.trims?.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Комплектация</h4>
+                    <Select value={selectedTrim} onValueChange={setSelectedTrim}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите комплектацию" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {selectedCar.trims.map((trim) => (
+                          <SelectItem key={trim.name} value={trim.name}>
+                            {trim.name} - {trim.price}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 
-                <div className="space-y-2">
-                  <h4 className="font-semibold">Цвет</h4>
-                  <Select value={selectedColor} onValueChange={setSelectedColor}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите цвет" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {selectedCar.colors.map((color) => (
-                        <SelectItem key={color.name} value={color.name}>
-                          <div className="flex items-center gap-2">
-                            <div 
-                              className="w-4 h-4 rounded-full border"
-                              style={{ backgroundColor: color.hex }}
-                            />
-                            {color.name}
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {selectedCar.colors?.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Цвет</h4>
+                    <Select value={selectedColor} onValueChange={setSelectedColor}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите цвет" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {selectedCar.colors.map((color) => (
+                          <SelectItem key={color.name} value={color.name}>
+                            <div className="flex items-center gap-2">
+                              <div 
+                                className="w-4 h-4 rounded-full border"
+                                style={{ backgroundColor: color.hex }}
+                              />
+                              {color.name}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               </div>
 
-              {selectedTrim && (
+              {selectedTrim && selectedCar.trims?.length > 0 && (
                 <div className="space-y-2">
                   <h4 className="font-semibold">Особенности комплектации</h4>
                   <ul className="list-disc list-inside space-y-1">
